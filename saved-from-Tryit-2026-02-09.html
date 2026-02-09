@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Be My Valentine 💘</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Comic Sans MS', cursive;
+    background: linear-gradient(135deg, #ff9ec4, #ffc3e6);
+    text-align: center;
+    transition: 0.3s;
+}
+
+.container {
+    background: rgba(255,255,255,0.9);
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    position: relative;
+    z-index: 2;
+}
+
+h1 {
+    color: #ff2e63;
+    font-size: 28px;
+}
+
+button {
+    padding: 12px 25px;
+    font-size: 18px;
+    margin: 10px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: 0.2s ease;
+    animation: bounce 1s infinite alternate;
+}
+
+#yesBtn {
+    background: #ff2e63;
+    color: white;
+    box-shadow: 0 0 20px #ff2e63;
+}
+
+#noBtn {
+    background: #ddd;
+    position: relative;
+}
+
+#message {
+    font-size: 32px;
+    color: #ff2e63;
+    margin-top: 20px;
+    display: none;
+    animation: glow 1s infinite alternate;
+}
+
+@keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-10px); }
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px #ff2e63; }
+    to { text-shadow: 0 0 25px #ff0055; }
+}
+
+@keyframes shake {
+    0% { transform: translate(2px, 2px); }
+    25% { transform: translate(-2px, -2px); }
+    50% { transform: translate(2px, -2px); }
+    75% { transform: translate(-2px, 2px); }
+    100% { transform: translate(2px, 2px); }
+}
+
+.heart, .confetti {
+    position: absolute;
+    pointer-events: none;
+}
+
+.heart {
+    font-size: 20px;
+    animation: floatUp 6s linear infinite;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(100vh); opacity: 1; }
+    100% { transform: translateY(-10vh); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>Will you be my Valentine? 💖</h1>
+    <button id="yesBtn">YES</button>
+    <button id="noBtn">NO</button>
+    <div id="message">i love u sm sweetheart 💞</div>
+</div>
+
+<audio id="bgMusic" loop>
+<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+</audio>
+
+<script>
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const message = document.getElementById("message");
+const music = document.getElementById("bgMusic");
+
+const noTexts = [
+"are you sure?",
+"baby u sure",
+"babyyyyyy",
+"just say yes baby",
+"baby pleaseeee"
+];
+
+let clickCount = 0;
+let yesSize = 18;
+let musicStarted = false;
+
+// Start music
+document.addEventListener("click", () => {
+    if (!musicStarted) {
+        music.play();
+        musicStarted = true;
+    }
+});
+
+// Floating hearts
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "💖";
+    heart.style.left = Math.random()*100 + "vw";
+    heart.style.fontSize = (Math.random()*20+20)+"px";
+    heart.style.animationDuration = (Math.random()*3+3)+"s";
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),6000);
+}
+setInterval(createHeart, 400);
+
+// NO runs away
+noBtn.addEventListener("mouseover", () => {
+    const x = Math.random() * (window.innerWidth - 100);
+    const y = Math.random() * (window.innerHeight - 50);
+    noBtn.style.position = "absolute";
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+});
+
+// NO clicked
+noBtn.addEventListener("click", () => {
+    document.body.style.animation = "shake 0.2s 3";
+    setTimeout(()=>document.body.style.animation="",600);
+
+    noBtn.textContent = noTexts[clickCount % noTexts.length];
+    yesSize += 12;
+    yesBtn.style.fontSize = yesSize + "px";
+    yesBtn.style.padding = (yesSize/2)+"px "+yesSize+"px";
+    clickCount++;
+});
+
+// Confetti
+function createConfetti() {
+    for (let i=0;i<100;i++){
+        const conf = document.createElement("div");
+        conf.className="confetti";
+        conf.innerHTML="✨";
+        conf.style.left=Math.random()*100+"vw";
+        conf.style.top=Math.random()*100+"vh";
+        conf.style.fontSize=(Math.random()*15+10)+"px";
+        document.body.appendChild(conf);
+        setTimeout(()=>conf.remove(),2000);
+    }
+}
+
+// YES clicked
+yesBtn.addEventListener("click", () => {
+    yesBtn.style.display="none";
+    noBtn.style.display="none";
+    message.style.display="block";
+    createConfetti();
+    document.body.style.background="linear-gradient(135deg,#ff2e63,#ff8fab)";
+});
+</script>
+
+</body>
+</html>
